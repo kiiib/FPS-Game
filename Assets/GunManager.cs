@@ -12,9 +12,21 @@ public class GunManager : MonoBehaviour {
 
     public GameObject muzzleFlash;
     public GameObject bulletCandiate;
+    private AudioSource gunShootSound;
+
+    
+
+	// Use this for initialization
+	void Start () {
+        gunShootSound = this.GetComponent<AudioSource>();
+	}
 
     public void TryToTriggerGun() {
         if (shootCounter <= 0) {
+            gunShootSound.Stop();
+            gunShootSound.pitch = Random.Range(0.8f, 1);
+            gunShootSound.Play();
+
             this.transform.DOShakeRotation(MinimumShootPeriod * 0.8f, 3f);
 
             muzzleCounter = muzzleShowPeriod;
@@ -30,13 +42,8 @@ public class GunManager : MonoBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         if (shootCounter > 0)
             shootCounter -= Time.deltaTime;
 
