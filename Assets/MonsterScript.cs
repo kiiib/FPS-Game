@@ -16,6 +16,12 @@ public class MonsterScript : MonoBehaviour {
     public ColiisionListScript PlayerSensor;
     public ColiisionListScript AttackSensor;
 
+    public void AttackPlayer() {
+        if(AttackSensor.CollisionObjects.Count > 0) {
+            AttackSensor.CollisionObjects[0].transform.GetChild(0).GetChild(0).SendMessage("Hit", 10);
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
         animator = this.GetComponent<Animator>();
@@ -24,6 +30,7 @@ public class MonsterScript : MonoBehaviour {
 	
     public void Hit(float value) {
         if(HitCounter <= 0) {
+            FollowTarget = GameObject.FindGameObjectWithTag("Player");
             HitCounter = MinimumHitPeriod;
             CurrentHP -= value;
 
