@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class GunManager : MonoBehaviour {
+public class FiregunManager : MonoBehaviour {
     public float MinimumShootPeriod;
     public float muzzleShowPeriod;
 
@@ -14,11 +14,11 @@ public class GunManager : MonoBehaviour {
     public GameObject bulletCandiate;
     private AudioSource gunShootSound;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         gunShootSound = this.GetComponent<AudioSource>();
-        
-	}
+
+    }
 
     public void TryToTriggerGun() {
         if (shootCounter <= 0) {
@@ -42,16 +42,16 @@ public class GunManager : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update() {
         Debug.Log(gunShootSound.name);
         if (shootCounter > 0)
             shootCounter -= Time.deltaTime;
 
-        if(muzzleCounter > 0) {
+        if (muzzleCounter > 0) {
             muzzleFlash.gameObject.SetActive(true);
             muzzleCounter -= Time.deltaTime;
         } else {
             muzzleFlash.gameObject.SetActive(false);
         }
-	}
+    }
 }

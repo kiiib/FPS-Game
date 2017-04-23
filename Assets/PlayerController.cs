@@ -15,14 +15,26 @@ public class PlayerController : MonoBehaviour {
 
     public JumpSensor JumpSensor;
     public float JumpSpeed;
-    public GunManager gumManager;
+    public GunManager gunManager;
+    public GameObject gun;
+    public FiregunManager fireGunManager;
+    public GameObject fireGun;
+    private bool currentGunState = true;   //記錄目前是哪一把槍, true是gun, false是fire gun
+
     public GameUIManager uiManager;
     public int hp = 100;
+    private AudioSource footMoveSound;
 
     // Use this for initialization
     void Start()
     {
+        footMoveSound = this.GetComponent<AudioSource>();
         animatorController = this.GetComponent<Animator>();
+
+        //init gun state
+        if (currentGunState) {
+            fireGun.SetActive(false);
+        }
     }
 
     public void Hit(int value) {
@@ -51,8 +63,26 @@ public class PlayerController : MonoBehaviour {
     {
         Cursor.visible = false;
         if (Input.GetMouseButton(0)) {
-            gumManager.TryToTriggerGun();
+            if (currentGunState) {
+               gunManager.TryToTriggerGun();
+            } else {
+               fireGunManager.TryToTriggerGun();
+            }
+            
         }
+        //換槍
+        if (Input.GetKeyUp(KeyCode.R)) {
+            if (currentGunState) {
+                fireGun.SetActive(true);
+                gun.SetActive(false);
+                currentGunState = false;
+            } else {
+                gun.SetActive(true);
+                fireGun.SetActive(false);
+                currentGunState = true;
+            }
+        }
+
 
         //決定鍵盤input的結果
         Vector3 movDirection = Vector3.zero;
@@ -61,6 +91,16 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKey(KeyCode.D)) { movDirection.x += 1; }
         if (Input.GetKey(KeyCode.A)) { movDirection.x -= 1; }
         movDirection = movDirection.normalized;
+
+        //腳步聲
+        if (Input.GetKeyDown(KeyCode.W)) { footMoveSound.Play(); }
+        if (Input.GetKeyDown(KeyCode.S)) { footMoveSound.Play(); }
+        if (Input.GetKeyDown(KeyCode.D)) { footMoveSound.Play(); }
+        if (Input.GetKeyDown(KeyCode.A)) { footMoveSound.Play(); }
+        if (Input.GetKeyUp(KeyCode.W)) { footMoveSound.Stop(); }
+        if (Input.GetKeyUp(KeyCode.S)) { footMoveSound.Stop(); }
+        if (Input.GetKeyUp(KeyCode.D)) { footMoveSound.Stop(); }
+        if (Input.GetKeyUp(KeyCode.A)) { footMoveSound.Stop(); }
 
         //決定要給Animator的動畫參數
         if (movDirection.magnitude == 0 || !JumpSensor.IsCanJump()) {
