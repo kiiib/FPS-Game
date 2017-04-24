@@ -43,7 +43,6 @@ public class GunManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Debug.Log(gunShootSound.name);
         if (shootCounter > 0)
             shootCounter -= Time.deltaTime;
 

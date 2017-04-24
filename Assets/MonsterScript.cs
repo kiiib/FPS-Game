@@ -15,15 +15,22 @@ public class MonsterScript : MonoBehaviour {
     private Rigidbody rigidBody;
     public ColiisionListScript PlayerSensor;
     public ColiisionListScript AttackSensor;
+    //受傷的效果
+    public GameObject PlayerTargetHittedEffect;
+
+    private bool playerHittedState = false;
+    private float playerHittedTime = 0;
 
     public void AttackPlayer() {
         if(AttackSensor.CollisionObjects.Count > 0) {
             AttackSensor.CollisionObjects[0].transform.GetChild(0).GetChild(0).SendMessage("Hit", 10);
+            playerHittedState = true;
         }
     }
 
 	// Use this for initialization
 	void Start () {
+        PlayerTargetHittedEffect = GameObject.Find("PlayerRoot").transform.GetChild(2).transform.gameObject;
         animator = this.GetComponent<Animator>();
         rigidBody = this.GetComponent<Rigidbody>();
     }
@@ -54,7 +61,19 @@ public class MonsterScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if(PlayerSensor.CollisionObjects.Count > 0) {
+        //Player被遠程攻擊
+        if (playerHittedState) {
+            playerHittedTime += Time.deltaTime;
+            PlayerTargetHittedEffect.SetActive(true);
+            if (playerHittedTime > 1) {
+                PlayerTargetHittedEffect.SetActive(false);
+                playerHittedState = false;
+                playerHittedTime = 0;
+            }
+        }
+
+
+        if (PlayerSensor.CollisionObjects.Count > 0) {
             FollowTarget = PlayerSensor.CollisionObjects[0].gameObject;
         }
 
