@@ -26,9 +26,12 @@ public class BulletScript : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         other.gameObject.SendMessage("Hit", damageValue);
 
-        explosion.gameObject.transform.parent = null;
-        explosion.gameObject.SetActive(true);
-        bulletAudio.pitch = Random.Range(0.8f, 1);
+        if (explosion) {
+            explosion.gameObject.transform.parent = null;
+            explosion.gameObject.SetActive(true);
+            bulletAudio.pitch = Random.Range(0.8f, 1);
+        }
+        
 
         KillYourSelf();
     }

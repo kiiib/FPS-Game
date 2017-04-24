@@ -29,7 +29,7 @@ public class FiregunManager : MonoBehaviour {
             this.transform.DOShakeRotation(MinimumShootPeriod * 0.8f, 3f);
 
             muzzleCounter = muzzleShowPeriod;
-            muzzleFlash.transform.localEulerAngles = new Vector3(0, 0, Random.Range(0, 360));
+            //muzzleFlash.transform.localEulerAngles = new Vector3(0, Random.Range(0, 360), 0);
 
             shootCounter = MinimumShootPeriod;
             GameObject newBullet = GameObject.Instantiate(bulletCandiate);
